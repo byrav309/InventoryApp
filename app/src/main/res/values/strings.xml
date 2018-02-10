@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Inventory App</string>
+    <string name="action_add_new_data">Add new data</string>
+    <string name="action_update_delete_product">Update or Delete data</string>
+    <string name="action_delete_all_product">Delete all Product</string>
+    <string name="delete_product">Delete Product</string>
+    <string name="product_name">Product Name</string>
+    <string name="prduct_name_hint">Enter Product Name</string>
+    <string name="product_price">Product Price</string>
+    <string name="product_price_hint">Enter Price</string>
+    <string name="quantity">Product Quantity</string>
+    <string name="supplier_name_title">Supplier Name</string>
+    <string name="supplier_name_hint">Enter Supplier Name</string>
+    <string name="supplier_phone_title">Supplier Phone</string>
+    <string name="supplier_phone_hint">Enter Phone Number </string>
+    <string name="supplier_email_title">Supplier E-mail Address</string>
+    <string name="supplier_email_hint">Enter Email id</string>
+    <string name="image_title">Product Image</string>
+    <string name="select_image">Select Image</string>
+    <string name="save">Save Product</string>
+    <string name="select_image_for_product">Select Image for Product</string>
+    <string name="missing">Missing</string>
+    <string name="product_addition_successful">Product Added successfully</string>
+    <string name="product_addition_failure">Failed to add Product</string>
+    <string name="add_another_product">Do you want to add another Product ?</string>
+    <string name="update_product">Update Product</string>
+    <string name="no_product_found">No product found. Please add.</string>
+    <string name="currency">₹</string>
+    <string name="items_left">left</string>
+    <string name="update_successful">Product updated successfully</string>
+    <string name="update_failed">Failed to update Product</string>
+    <string name="product_deleted_successfully">Product deleted successfully</string>
+    <string name="product_deletion_failed">Product deletion failed</string>
+
+</resources>
