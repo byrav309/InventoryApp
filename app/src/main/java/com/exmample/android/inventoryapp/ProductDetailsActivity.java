@@ -1,11 +1,13 @@
 package com.exmample.android.inventoryapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -212,27 +214,59 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
             case R.id.delete_product:
                 deleteProduct();
                 break;
+
+            case R.id.order_more :
+                orderMoreProduct();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteProduct() {
-        if(dbHelper.deleteProduct(productItem.getProductID()) != 0){
-            showMessage(R.string.product_deleted_successfully);
-            finish();
-        } else {
-            showMessage(R.string.product_deletion_failed);
-        }
+    private void orderMoreProduct() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.order_message);
+        builder.setPositiveButton(R.string.phone, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + productItem.getSupplierPhone()));
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton(R.string.email, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Intent intent = new Intent(android.content.Intent.ACTION_SENDTO);
+                intent.setType("text/plain");
+                intent.setData(Uri.parse("mailto:" + productItem.getSupplierEmailId()));
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Recurrent new order");
+                String bodyMessage = getString(R.string.body_of_the_message);
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, bodyMessage);
+                startActivity(intent);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
-    private void clearAllField(){
-        productNameInput.setText("");
-        productPriceInput.setText("");
-        productQuantityInput.setText("");
-        supplierNameInput.setText("");
-        supplierPhoneInput.setText("");
-        supplierEmailIdInput.setText("");
-        productImage.setVisibility(View.GONE);
+    private void deleteProduct() {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.delete_caution)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(dbHelper.deleteProduct(productItem.getProductID()) != 0){
+                            showMessage(R.string.product_deleted_successfully);
+                            finish();
+                        } else {
+                            showMessage(R.string.product_deletion_failed);
+                        }
+                        dialog.dismiss();
+                    }
+                }).
+                setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setIcon(android.R.drawable.ic_dialog_alert).show();
+
     }
 
 }

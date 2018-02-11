@@ -93,4 +93,14 @@ public class ProductDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(ProductDataBaseObject.TABLE_NAME, null, null);
     }
+
+    public void sellOneItem(int productId, int quantity){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ProductDataBaseObject.PRODUCT_QUANTITY_FIELD, quantity);
+        String whereClause = ProductDataBaseObject.PRODUCT_ID_FIELD + "=?";
+        String[] whereArgs = new String[]{String.valueOf(productId)};
+        db.update(ProductDataBaseObject.TABLE_NAME,
+                values, whereClause, whereArgs);
+    }
 }

@@ -8,4 +8,8 @@
         android:icon="@android:drawable/ic_menu_delete"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/order_more"
+        android:title="@string/menu_order_item"/>
+
 </menu>

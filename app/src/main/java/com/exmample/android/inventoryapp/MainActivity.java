@@ -1,7 +1,9 @@
 package com.exmample.android.inventoryapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -16,7 +18,7 @@ import android.support.v4.app.LoaderManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<ProductItem>>, OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<ProductItem>>, OnItemClickListener {
 
     private RecyclerView recyclerView;
     private ProductAdapter adapter;
@@ -53,18 +55,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_add_new_data :
+        switch (item.getItemId()) {
+            case R.id.action_add_new_data:
                 addNewData();
                 break;
-            case R.id.action_delete_all :
+            case R.id.action_delete_all:
                 deleteAll();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewData(){
+    private void addNewData() {
         Intent intent = new Intent(this, AddNewDataActivity.class);
         startActivity(intent);
     }
@@ -89,9 +91,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private void deleteAll(){
-        dbHelper.deleteAllProducts();
-        getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+    private void deleteAll() {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+
+        builder.setMessage(R.string.delete_all_caution)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbHelper.deleteAllProducts();
+                        getSupportLoaderManager().restartLoader(LOADER_ID, null, MainActivity.this);
+                        dialog.dismiss();
+                    }
+                }).
+                setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setIcon(android.R.drawable.ic_dialog_alert).show();
+
     }
 
     @Override
@@ -99,5 +115,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Intent intent = new Intent(MainActivity.this, ProductDetailsActivity.class);
         intent.putExtra(InventoryConstants.PRODUCT_ID, item.getProductID());
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaleButtonClicked(ProductItem item) {
+        int remainingQuantity;
+        if (item.getQuantity() > 0) {
+            remainingQuantity = item.getQuantity() - 1;
+            dbHelper.sellOneItem(item.getProductID(), remainingQuantity);
+            getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+        } else {
+            return;
+        }
     }
 }
