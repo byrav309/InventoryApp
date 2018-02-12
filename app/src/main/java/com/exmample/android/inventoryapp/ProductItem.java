@@ -28,6 +28,34 @@ public class ProductItem {
         this.icon = icon;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public void setSupplierPhone(int supplierPhone) {
+        this.supplierPhone = supplierPhone;
+    }
+
+    public void setSupplierEmailId(String supplierEmailId) {
+        this.supplierEmailId = supplierEmailId;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     public int getProductID() {
         return productID;
     }

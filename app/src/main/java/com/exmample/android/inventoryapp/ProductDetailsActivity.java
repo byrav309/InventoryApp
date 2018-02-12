@@ -47,9 +47,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         initialize();
     }
 
-    private void initialize(){
+    private void initialize() {
         Cursor cursor = dbHelper.readProduct(getIntent().getIntExtra(InventoryConstants.PRODUCT_ID, 0));
-        if(cursor != null && cursor.getCount() >= 0){
+        if (cursor != null && cursor.getCount() >= 0) {
             cursor.moveToFirst();
             productItem.initializeFromCursor(cursor);
             cursor.close();
@@ -76,7 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         selectImageButton.setOnClickListener(this);
         imageUri = Uri.parse(productItem.getIcon());
         productImage = (ImageView) findViewById(R.id.product_image);
-        if(imageUri != null){
+        if (imageUri != null) {
             productImage.setVisibility(View.VISIBLE);
             productImage.setImageURI(imageUri);
             productImage.invalidate();
@@ -98,7 +98,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 increaseQuantity();
                 break;
             case R.id.update_product:
-               updateProduct();
+                updateProduct();
                 break;
         }
     }
@@ -107,30 +107,49 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         Toast.makeText(getApplicationContext(), resourceId, Toast.LENGTH_LONG).show();
     }
 
-    private boolean updateProduct(){
+    private boolean updateProduct() {
         {
             boolean status = true;
             if (!checkIfValueSet(productNameInput, R.string.product_name)) {
                 status = false;
+            } else {
+                productItem.setName(productNameInput.getText().toString().trim());
             }
+
             if (!checkIfValueSet(productPriceInput, R.string.product_price)) {
                 status = false;
+            } else {
+                productItem.setPrice(Integer.parseInt(productPriceInput.getText().toString().trim()));
             }
+
             if (!checkIfValueSet(productQuantityInput, R.string.quantity)) {
                 status = false;
+            } else {
+                productItem.setQuantity(Integer.parseInt(productQuantityInput.getText().toString().trim()));
             }
+
             if (!checkIfValueSet(supplierNameInput, R.string.supplier_name_title)) {
                 status = false;
+            } else {
+                productItem.setSupplierName(supplierNameInput.getText().toString().trim());
             }
+
             if (!checkIfValueSet(supplierPhoneInput, R.string.supplier_phone_title)) {
                 status = false;
+            } else {
+                productItem.setSupplierPhone(Integer.parseInt(supplierPhoneInput.getText().toString().trim()));
             }
+
             if (!checkIfValueSet(supplierEmailIdInput, R.string.supplier_email_title)) {
                 status = false;
+            } else {
+                productItem.setSupplierEmailId(supplierEmailIdInput.getText().toString().trim());
             }
             if (imageUri == null) {
                 status = false;
                 selectImageButton.setError(getString(R.string.missing) + " : " + getString(R.string.image_title));
+            } else {
+                productItem.setIcon(imageUri.toString().trim());
             }
             if (!status) {
                 return false;
@@ -215,7 +234,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
                 deleteProduct();
                 break;
 
-            case R.id.order_more :
+            case R.id.order_more:
                 orderMoreProduct();
         }
         return super.onOptionsItemSelected(item);
@@ -253,7 +272,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements View.On
         builder.setMessage(R.string.delete_caution)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if(dbHelper.deleteProduct(productItem.getProductID()) != 0){
+                        if (dbHelper.deleteProduct(productItem.getProductID()) != 0) {
                             showMessage(R.string.product_deleted_successfully);
                             finish();
                         } else {
